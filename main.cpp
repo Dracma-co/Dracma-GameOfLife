@@ -1,11 +1,12 @@
 #include <iostream>
-#define MAX_INSTRUCCIONES 10
-#define MAX_TABLERO 100
+#define MAX_INSTRUCTIONS 10
+#define MAX_DISPLAY 100
 #define WIDTH 50
 #define HEIGHT 50
+#define MAX_MATERIAL 10
+#define ALIVE 1
+#define DEATH 0
 
-char display[WIDTH][HEIGHT];
-int content[WIDTH][HEIGHT];
 
 void paint() {
     for (int i = 0; i < HEIGHT; i++) {
