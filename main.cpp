@@ -13,29 +13,29 @@ typedef struct material {
     int num_instructions;
 } material_t;
 
+void initialization (material_t content[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL]) {
+    for (int i = 0; i < HEIGHT; i++)
+        for (int j = 0; j < WIDTH; j++)
+            content[i][j] = list_material[DEATH];
+}
 
-void paint() {
+void paint(material_t content[WIDTH][HEIGHT]) {
     for (int i = 0; i < HEIGHT; i++) {
-        for (int j = 0; j < WIDTH; j++) {
-            if (content[i][j] == 0)
-                printf("_|");
-            else
-                printf("0|");
-        }
+        for (int j = 0; j < WIDTH; j++)
+            (content[i][j].state == 0) ? printf("_|") : printf("0|");
         printf("\n");
     }
+    printf("\n");
 }
 
-void TakeInput() {
-    content[25][10] = 1;
-    content[26][10] = 1;
-    content[27][10] = 1;
-    content[28][10] = 1;
-    content[29][10] = 1;
+void take_input(material_t content[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL]) {
+    content[25][10] = list_material[ALIVE];
+    content[26][10] = list_material[ALIVE];
+    content[27][10] = list_material[ALIVE];
+    content[28][10] = list_material[ALIVE];
+    content[29][10] = list_material[ALIVE];
 }
 
-bool play() {
-    return false;
 }
 
 
