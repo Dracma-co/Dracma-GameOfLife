@@ -68,7 +68,41 @@ void instruction_death (material_t content[WIDTH][HEIGHT], material_t list_mater
 }
 
 int main(int argc, char* argv[]) {
-    TakeInput();
-    paint();
+
+    material_t content[WIDTH][HEIGHT];
+    bool game_state = true;
+    material_t list_material[MAX_MATERIAL];
+
+    material_t death;
+    death.state = DEATH;
+    death.instruction[0] = instruction_death;
+    death.num_instructions = 1;
+
+    material_t alive;
+    alive.state = ALIVE;
+    alive.instruction[0] = instruction_alive;
+    alive.num_instructions = 1;
+
+    list_material[DEATH] = death;
+    list_material[ALIVE] = alive;
+
+    initialization(content, list_material);
+    take_input(content, list_material);
+
+    paint(content);
+    while (game_state) {
+
+        for (int i = 0; i < HEIGHT; i++) {
+            for (int j = 0; j < WIDTH; j++) {
+                for (int k = 0; k < content[i][j].num_instructions; k++) {
+                    content[i][j].instruction[k](content, list_material, i, j);
+                }
+            }
+        }
+
+        paint(content);
+        game_state = false;
+    }
+
     return 0;
 }
