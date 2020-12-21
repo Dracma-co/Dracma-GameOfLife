@@ -7,6 +7,12 @@
 #define ALIVE 1
 #define DEATH 0
 
+typedef struct material {
+    int state;
+    void (*instruction[MAX_INSTRUCTIONS]) (struct material content[WIDTH][HEIGHT], struct material list[MAX_MATERIAL], int x, int y);
+    int num_instructions;
+} material_t;
+
 
 void paint() {
     for (int i = 0; i < HEIGHT; i++) {
@@ -33,10 +39,6 @@ bool play() {
 }
 
 
-typedef struct material {
-    int estado;
-    void (*instruccion[MAX_INSTRUCCIONES]) (struct material[MAX_TABLERO][MAX_TABLERO], int x, int y);
-} material_t;
 
 int main(int argc, char* argv[]) {
     TakeInput();
