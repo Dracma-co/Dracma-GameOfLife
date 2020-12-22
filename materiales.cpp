@@ -1,5 +1,15 @@
 #include "materiales.h"
 
+void vivo::reaccionar(material* current[WIDTH][HEIGHT], material* update[WIDTH][HEIGHT], int x, int y) {
+    int neighbors_alive = num_neighbors(current, x, y);
+    update[x][y] = (neighbors_alive < 2 || neighbors_alive > 3) ? new muerto() : current[x][y];
+}
+
+void muerto::reaccionar(material* current[WIDTH][HEIGHT], material* update[WIDTH][HEIGHT], int x, int y) {
+    int neighbors_alive = num_neighbors(current, x, y);
+    update[x][y] = (neighbors_alive == 3) ? new vivo() : current[x][y];
+}
+
 int material::num_neighbors(material* content[WIDTH][HEIGHT], int x, int y) {
     int num = 0, pos_x, pos_y;
 
@@ -15,14 +25,3 @@ int material::num_neighbors(material* content[WIDTH][HEIGHT], int x, int y) {
     }
     return num;
 }
-
-void vivo::reaccionar(material* current[WIDTH][HEIGHT], material* update[WIDTH][HEIGHT], int x, int y) {
-    int neighbors_alive = num_neighbors(current, x, y);
-    update[x][y] = (neighbors_alive == 3) ? new muerto() : current[x][y];
-}
-
-void muerto::reaccionar(material* current[WIDTH][HEIGHT], material* update[WIDTH][HEIGHT], int x, int y) {
-    int neighbors_alive = num_neighbors(current, x, y);
-    update[x][y] = ((neighbors_alive < 2 || neighbors_alive > 3)) ? new vivo() : current[x][y];
-}
-
