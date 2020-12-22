@@ -43,11 +43,11 @@ int num_neighbors (material_t content[WIDTH][HEIGHT], int x, int y) {
     for (int i = -1; i <= 1; i++) {
         for (int j = -1; j <= 1; j++) {
 
-            pos_x = (x + i)%WIDTH;
-            pos_y = (y + j)%HEIGHT;
+            pos_x = (x + i < 0) ? WIDTH - 1 : (x + i)%WIDTH;
+            pos_y = (y + j < 0) ? HEIGHT - 1 : (y + j)%HEIGHT;
 
-            if (content[pos_x][pos_y].state == ALIVE)
-                num++;
+            if (pos_x != x || pos_y != y)
+                if (content[pos_x][pos_y].state == ALIVE) num++;
         }
     }
     return num;
@@ -64,13 +64,20 @@ void instruction_death (material_t content_now[WIDTH][HEIGHT], material_t conten
 
     content_update[x][y] = (neighbors_alive == 3) ? list_material[ALIVE] : content_now[x][y];
 }
+
+void copy_content (material_t old_content[WIDTH][HEIGHT], material_t new_content[WIDTH][HEIGHT]) {
+    for (int i = 0; i < WIDTH; i++)
+        for (int j = 0; j < HEIGHT; j++)
+            old_content[i][j] = new_content[i][j];
 }
 
 int main(int argc, char* argv[]) {
 
-    material_t content[WIDTH][HEIGHT];
-    bool game_state = true;
+    material_t content_now[WIDTH][HEIGHT];
+    material_t content_update[WIDTH][HEIGHT];
     material_t list_material[MAX_MATERIAL];
+
+    int contador = 0;
 
     material_t death;
     death.state = DEATH;
@@ -85,22 +92,23 @@ int main(int argc, char* argv[]) {
     list_material[DEATH] = death;
     list_material[ALIVE] = alive;
 
-    initialization(content, list_material);
-    take_input(content, list_material);
+    initialization(content_now, list_material);
+    take_input(content_now, list_material);
 
-    paint(content);
-    while (game_state) {
+    paint(content_now);
+    while (contador < 6) {
 
-        for (int i = 0; i < HEIGHT; i++) {
-            for (int j = 0; j < WIDTH; j++) {
-                for (int k = 0; k < content[i][j].num_instructions; k++) {
-                    content[i][j].instruction[k](content, list_material, i, j);
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < HEIGHT; j++) {
+                for (int k = 0; k < content_now[i][j].num_instructions; k++) {
+                    content_now[i][j].instruction[k](content_now, content_update, list_material, i, j);
                 }
             }
         }
+        copy_content(content_now, content_update);
 
-        paint(content);
-        game_state = false;
+        paint(content_now);
+        contador++;
     }
 
     return 0;
