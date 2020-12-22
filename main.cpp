@@ -2,16 +2,16 @@
 #include <unistd.h>
 
 #define MAX_INSTRUCTIONS 10
-#define MAX_DISPLAY 100
+#define MAX_MATERIAL 10
 #define WIDTH 50
 #define HEIGHT 50
-#define MAX_MATERIAL 10
+
 #define ALIVE 1
 #define DEATH 0
 
 typedef struct material {
     int state;
-    void (*instruction[MAX_INSTRUCTIONS]) (struct material content_now[WIDTH][HEIGHT], struct material content_update[WIDTH][HEIGHT], struct material list[MAX_MATERIAL], int x, int y);
+    void (*instruction[MAX_INSTRUCTIONS]) (struct material current[WIDTH][HEIGHT], struct material update[WIDTH][HEIGHT], struct material list[MAX_MATERIAL], int x, int y);
     int num_instructions;
 } material_t;
 
@@ -73,13 +73,7 @@ void copy_content (material_t old_content[WIDTH][HEIGHT], material_t new_content
             old_content[i][j] = new_content[i][j];
 }
 
-int main(int argc, char* argv[]) {
-
-    material_t content_now[WIDTH][HEIGHT];
-    material_t content_update[WIDTH][HEIGHT];
-    material_t list_material[MAX_MATERIAL];
-
-    bool game_state = true;
+void make_material_list(material_t list_material[]) {
 
     material_t death;
     death.state = DEATH;
@@ -93,7 +87,17 @@ int main(int argc, char* argv[]) {
 
     list_material[DEATH] = death;
     list_material[ALIVE] = alive;
+}
 
+int main(int argc, char* argv[]) {
+
+    material_t content_now[WIDTH][HEIGHT];
+    material_t content_update[WIDTH][HEIGHT];
+    material_t list_material[MAX_MATERIAL];
+
+    bool game_state = true;
+
+    make_material_list(list_material);
     initialization(content_now, list_material);
     take_input(content_now, list_material);
 
