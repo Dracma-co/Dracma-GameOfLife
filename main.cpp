@@ -45,14 +45,14 @@ int main(int argc, char* argv[]) {
 
     paint(content_now);
     while (game_state) {
-        Sleep(100);
+        sleep(1);
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
                 content_now[i][j]->reaccionar(content_now, content_update, i, j);
             }
         }
         copy_content(content_now, content_update);
-        system("cls");
+        system("clear");
         paint(content_now);
     }
 
