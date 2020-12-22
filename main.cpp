@@ -16,6 +16,7 @@ typedef struct material {
 } material_t;
 
 void initialization (material_t content[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL]) {
+
     for (int i = 0; i < HEIGHT; i++)
         for (int j = 0; j < WIDTH; j++)
             content[i][j] = list_material[DEATH];
@@ -61,6 +62,7 @@ void instruction_alive (material_t content_now[WIDTH][HEIGHT], material_t conten
 }
 
 void instruction_death (material_t content_now[WIDTH][HEIGHT], material_t content_update[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL], int x, int y) {
+
     int neighbors_alive = num_neighbors(content_now, x, y);
 
     content_update[x][y] = (neighbors_alive == 3) ? list_material[ALIVE] : content_now[x][y];
