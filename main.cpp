@@ -24,7 +24,7 @@ void initialization (material_t content[WIDTH][HEIGHT], material_t list_material
 void paint(material_t content[WIDTH][HEIGHT]) {
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++)
-            (content[i][j].state == 0) ? printf("_|") : printf("0|");
+            (content[i][j].state == 0) ? printf("  ") : printf("||");
         printf("\n");
     }
     printf("\n");
