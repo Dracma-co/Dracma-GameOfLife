@@ -20,8 +20,12 @@ class material {
 
 		virtual void reaccionar(material* current[WIDTH][HEIGHT], material* update[WIDTH][HEIGHT], int x, int y) {};
 
-		int getEstado() {
+		int get_state() {
 			return state;
+		}
+
+		int get_name() {
+			return name;
 		}
 
 		int num_neighbors(material* content[WIDTH][HEIGHT], int x, int y);
