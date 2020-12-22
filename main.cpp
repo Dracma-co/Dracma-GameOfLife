@@ -53,18 +53,17 @@ int num_neighbors (material_t content[WIDTH][HEIGHT], int x, int y) {
     return num;
 }
 
-void instruction_alive (material_t content[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL], int x, int y) {
-    int neighbors_alive = num_neighbors(content, x, y);
+void instruction_alive (material_t content_now[WIDTH][HEIGHT], material_t content_update[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL], int x, int y) {
+    int neighbors_alive = num_neighbors(content_now, x, y);
 
-    if (neighbors_alive < 2 || neighbors_alive > 3)
-        content[x][y] = list_material[DEATH];
+    content_update[x][y] = (neighbors_alive < 2 || neighbors_alive > 3) ? list_material[DEATH] : content_now[x][y];
 }
 
-void instruction_death (material_t content[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL], int x, int y) {
-    int neighbors_alive = num_neighbors(content, x, y);
+void instruction_death (material_t content_now[WIDTH][HEIGHT], material_t content_update[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL], int x, int y) {
+    int neighbors_alive = num_neighbors(content_now, x, y);
 
-    if (neighbors_alive == 3)
-        content[x][y] = list_material[ALIVE];
+    content_update[x][y] = (neighbors_alive == 3) ? list_material[ALIVE] : content_now[x][y];
+}
 }
 
 int main(int argc, char* argv[]) {
