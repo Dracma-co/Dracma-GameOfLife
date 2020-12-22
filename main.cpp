@@ -9,7 +9,7 @@
 
 typedef struct material {
     int state;
-    void (*instruction[MAX_INSTRUCTIONS]) (struct material content[WIDTH][HEIGHT], struct material list[MAX_MATERIAL], int x, int y);
+    void (*instruction[MAX_INSTRUCTIONS]) (struct material content_now[WIDTH][HEIGHT], struct material content_update[WIDTH][HEIGHT], struct material list[MAX_MATERIAL], int x, int y);
     int num_instructions;
 } material_t;
 
