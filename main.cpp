@@ -1,30 +1,31 @@
 #include <stdio.h>
 #include <iostream>
-#include<windows.h>
+#include <windows.h>
 #include "materiales.h"
-
-using namespace std;
 
 void initialization(material* content[WIDTH][HEIGHT]) {
     for (int i = 0; i < HEIGHT; i++)
         for (int j = 0; j < WIDTH; j++)
-            content[i][j] = new muerto();
+            content[i][j] = new death();
 }
 void paint(material* content[WIDTH][HEIGHT]) {
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++)
-            (content[i][j]->getEstado() == 0) ? printf("  ") : printf("||");
-        printf("\n");
+            (content[i][j]->get_name() == DEATH) ? printf("  ") : printf("[]");
+        printf("|\n");
     }
     printf("\n");
 }
 
 void take_input(material* content[WIDTH][HEIGHT]) {
-    content[11][10] = new vivo();
-    content[12][11] = new vivo();
-    content[10][12] = new vivo();
-    content[11][12] = new vivo();
-    content[12][12] = new vivo();
+    content[11][10] = new alive();
+    content[12][11] = new alive();
+    content[10][12] = new alive();
+    content[11][12] = new alive();
+    content[12][12] = new alive();
+    content[12][13] = new alive();
+    content[12][14] = new alive();
+    content[12][15] = new alive();
 }
 
 void copy_content(material* old_content[WIDTH][HEIGHT], material* new_content[WIDTH][HEIGHT]) {
@@ -45,7 +46,7 @@ int main(int argc, char* argv[]) {
 
     paint(content_now);
     while (game_state) {
-        Sleep(100);
+        Sleep(1);
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
                 content_now[i][j]->reaccionar(content_now, content_update, i, j);

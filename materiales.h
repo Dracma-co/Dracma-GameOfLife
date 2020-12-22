@@ -1,38 +1,49 @@
-#pragma once
+#ifndef _MATERIALES_H_
+#define _MATERIALES_H_
+
 #define MAX_MATERIAL 10
 #define WIDTH 50
 #define HEIGHT 50
 #define ALIVE 1
 #define DEATH 0
 
-class material
-{
+class material {
 protected:
-    int estado;
-    int nombre;
+	int name;
+	int state;
 public:
-    material(int state, int name) : estado(state), nombre(name) {
-    };
-    material() : estado(0), nombre(0) {
-    }
-    virtual ~material() {}
-    int getEstado() { return estado; }
-    virtual void reaccionar(material* current[WIDTH][HEIGHT], material* update[WIDTH][HEIGHT], int x, int y) {};
-    int num_neighbors(material* content[WIDTH][HEIGHT], int x, int y);
+	material(int name, int state) : name(name), state(state) {};
+
+	material() : name(0), state(0) {}
+
+	virtual ~material() {}
+
+	virtual void reaccionar(material* current[WIDTH][HEIGHT], material* update[WIDTH][HEIGHT], int x, int y) {};
+
+	int get_state() {
+		return state;
+	}
+
+	int get_name() {
+		return name;
+	}
+
+	int num_neighbors(material* content[WIDTH][HEIGHT], int x, int y);
 };
 
-class vivo : public material
-{
+
+class alive : public material {
 public:
-    vivo() : material(1, 1) {};
-    ~vivo() {}
-    void reaccionar(material* current[WIDTH][HEIGHT], material* update[WIDTH][HEIGHT], int x, int y);
+	alive() : material(ALIVE, 0) {};
+	~alive() {}
+	void reaccionar(material* current[WIDTH][HEIGHT], material* update[WIDTH][HEIGHT], int x, int y);
 };
 
-class muerto : public material
-{
+class death : public material {
 public:
-    muerto() : material(0, 0) {};
-    ~muerto() {}
-    void reaccionar(material* current[WIDTH][HEIGHT], material* update[WIDTH][HEIGHT], int x, int y);
+	death() : material(DEATH, 0) {};
+	~death() {}
+	void reaccionar(material* current[WIDTH][HEIGHT], material* update[WIDTH][HEIGHT], int x, int y);
 };
+
+#endif /* MATERIALES_H */
