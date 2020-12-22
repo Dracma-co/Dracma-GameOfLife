@@ -1,5 +1,4 @@
 #include "materiales.h"
-#include <stdio.h>
 
 int material::num_neighbors(material* content[WIDTH][HEIGHT], int x, int y) {
     int num = 0, pos_x, pos_y;

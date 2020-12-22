@@ -12,7 +12,7 @@ void initialization(material* content[WIDTH][HEIGHT]) {
 }
 void paint(material* content[WIDTH][HEIGHT]) {
     for (int i = 0; i < HEIGHT; i++) {
-        for (int j = 0; j < WIDTH; j++)
+        for (int j = 0; j < WIDTH; j++) 
             (content[i][j]->get_name() == DEATH) ? printf("  ") : printf("[]");
         printf("\n");
     }
