@@ -1,90 +1,119 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <windows.h>  // notice this! you need it!
+#include <iostream>
+#include <windows.h>
 
-#define MAX_INSTRUCCIONES 10
+#define MAX_INSTRUCTIONS 10
+#define MAX_MATERIAL 10
 #define WIDTH 50
 #define HEIGHT 50
 
+#define ALIVE 1
+#define DEATH 0
+
 typedef struct material {
-    int estado;
-    void (*instruccion[MAX_INSTRUCCIONES]) (int display[HEIGHT][WIDTH], int newy[HEIGHT][WIDTH], int x, int y);
+    int state;
+    void (*instruction[MAX_INSTRUCTIONS]) (struct material current[WIDTH][HEIGHT], struct material update[WIDTH][HEIGHT], struct material list[MAX_MATERIAL], int x, int y);
+    int num_instructions;
 } material_t;
 
-void paint(int content[HEIGHT][WIDTH]) {
-    for (int i = 0; i < HEIGHT; i++) {
-        for (int j = 0; j < WIDTH; j++) {
-            if (content[i][j] == 0)
-                printf("  ");
-            else
-                printf("||");
-        }
-        printf("\n");
-    }
-}
-
-void instruccion1(int display[HEIGHT][WIDTH], int newy[HEIGHT][WIDTH], int i, int j) {
-    int nghb = display[((i % HEIGHT) + HEIGHT) % HEIGHT][(((j + 1) % WIDTH) + WIDTH) % WIDTH] + display[((i % HEIGHT) + HEIGHT) % HEIGHT][(((j - 1) % WIDTH) + WIDTH) % WIDTH];
-    nghb += display[(((i + 1) % HEIGHT) + HEIGHT) % HEIGHT][(((j + 1) % WIDTH) + WIDTH) % WIDTH] + display[(((i + 1) % HEIGHT) + HEIGHT) % HEIGHT][(((j - 1) % WIDTH) + WIDTH) % WIDTH];
-    nghb += display[(((i - 1) % HEIGHT) + HEIGHT) % HEIGHT][(((j + 1) % WIDTH) + WIDTH) % WIDTH] + display[(((i - 1) % HEIGHT) + HEIGHT) % HEIGHT][(((j - 1) % WIDTH) + WIDTH) % WIDTH];
-    nghb += display[(((i - 1) % HEIGHT) + HEIGHT) % HEIGHT][(((j) % WIDTH) + WIDTH) % WIDTH] + display[(((i + 1) % HEIGHT) + HEIGHT) % HEIGHT][(((j) % WIDTH) + WIDTH) % WIDTH];
-    if (display[i][j] == 0 && nghb == 3)
-        newy[i][j] = 1; //it is alive
-    if (display[i][j] == 1 && (nghb > 3 || nghb < 2))
-        newy[i][j] = 0; //it is dead
-}
-
-void take_input(int content[HEIGHT][WIDTH]) {
-    content[25][10] = 1;
-    content[26][10] = 1;
-    content[27][10] = 1;
-    content[35][11] = 1;
-    content[34][11] = 1;
-    content[23][34] = 1;
-    content[34][12] = 1;
-
-    content[11][12] = 1;
-    content[12][14] = 1;
-    content[13][12] = 1;
-}
-
-void inicializar(int display[HEIGHT][WIDTH], material content[HEIGHT][WIDTH]) {
+void initialization(material_t content[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL]) {
     for (int i = 0; i < HEIGHT; i++)
         for (int j = 0; j < WIDTH; j++)
-        {
-            content[i][j].estado = 0;
-            content[i][j].instruccion[0] = instruccion1;
-
-            display[i][j] = 0;
-        }
-    take_input(display);
-    paint(display);
+            content[i][j] = list_material[DEATH];
 }
 
-//bool play() {
-//    return false;
-//}
-
-int main() {
-    material actual[HEIGHT][WIDTH];
-    int display[HEIGHT][WIDTH];
-    inicializar(display, actual);
-    while (true) {
-        Sleep(150);
-        int newState[HEIGHT][WIDTH];
-        for (int i = 0; i < HEIGHT; i++)
-            for (int j = 0; j < WIDTH; j++)
-            {
-                newState[i][j] = display[i][j];
-                actual[i][j].instruccion[0](display, newState, i, j);
-            }
-        for (int i = 0; i < HEIGHT; i++)
-            for (int j = 0; j < WIDTH; j++)
-            {
-                display[i][j] = newState[i][j];
-            }
-        system("cls");
-        paint(display);
+void paint(material_t content[WIDTH][HEIGHT]) {
+    for (int i = 0; i < HEIGHT; i++) {
+        for (int j = 0; j < WIDTH; j++)
+            (content[i][j].state == 0) ? printf("  ") : printf("||");
+        printf("\n");
     }
+    printf("\n");
+}
+
+void take_input(material_t content[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL]) {
+    content[11][10] = list_material[ALIVE];
+    content[12][11] = list_material[ALIVE];
+    content[10][12] = list_material[ALIVE];
+    content[11][12] = list_material[ALIVE];
+    content[12][12] = list_material[ALIVE];
+}
+
+int num_neighbors(material_t content[WIDTH][HEIGHT], int x, int y) {
+    int num = 0, pos_x, pos_y;
+
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
+
+            pos_x = (x + i < 0) ? WIDTH - 1 : (x + i) % WIDTH;
+            pos_y = (y + j < 0) ? HEIGHT - 1 : (y + j) % HEIGHT;
+
+            if (pos_x != x || pos_y != y)
+                if (content[pos_x][pos_y].state == ALIVE) num++;
+        }
+    }
+    return num;
+}
+
+void instruction_alive(material_t content_now[WIDTH][HEIGHT], material_t content_update[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL], int x, int y) {
+    int neighbors_alive = num_neighbors(content_now, x, y);
+
+    content_update[x][y] = (neighbors_alive < 2 || neighbors_alive > 3) ? list_material[DEATH] : content_now[x][y];
+}
+
+void instruction_death(material_t content_now[WIDTH][HEIGHT], material_t content_update[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL], int x, int y) {
+    int neighbors_alive = num_neighbors(content_now, x, y);
+
+    content_update[x][y] = (neighbors_alive == 3) ? list_material[ALIVE] : content_now[x][y];
+}
+
+void copy_content(material_t old_content[WIDTH][HEIGHT], material_t new_content[WIDTH][HEIGHT]) {
+    for (int i = 0; i < WIDTH; i++)
+        for (int j = 0; j < HEIGHT; j++)
+            old_content[i][j] = new_content[i][j];
+}
+
+void make_material_list(material_t list_material[]) {
+
+    material_t death;
+    death.state = DEATH;
+    death.instruction[0] = instruction_death;
+    death.num_instructions = 1;
+
+    material_t alive;
+    alive.state = ALIVE;
+    alive.instruction[0] = instruction_alive;
+    alive.num_instructions = 1;
+
+    list_material[DEATH] = death;
+    list_material[ALIVE] = alive;
+}
+
+int main(int argc, char* argv[]) {
+
+    material_t content_now[WIDTH][HEIGHT];
+    material_t content_update[WIDTH][HEIGHT];
+    material_t list_material[MAX_MATERIAL];
+
+    bool game_state = true;
+
+    make_material_list(list_material);
+    initialization(content_now, list_material);
+    take_input(content_now, list_material);
+
+    paint(content_now);
+    while (game_state) {
+        Sleep(100);
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < HEIGHT; j++) {
+                for (int k = 0; k < content_now[i][j].num_instructions; k++) {
+                    content_now[i][j].instruction[k](content_now, content_update, list_material, i, j);
+                }
+            }
+        }
+        copy_content(content_now, content_update);
+        system("cls");
+        paint(content_now);
+    }
+
     return 0;
 }
