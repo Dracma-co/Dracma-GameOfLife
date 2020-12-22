@@ -39,8 +39,7 @@ void take_input(material_t content[WIDTH][HEIGHT], material_t list_material[MAX_
 }
 
 int num_neighbors (material_t content[WIDTH][HEIGHT], int x, int y) {
-    int num = 0;
-    int pos_x, pos_y;
+    int num = 0, pos_x, pos_y;
 
     for (int i = -1; i <= 1; i++) {
         for (int j = -1; j <= 1; j++) {
