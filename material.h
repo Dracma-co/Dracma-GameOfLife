@@ -25,9 +25,9 @@ public:
             for (int j = -1; j <= 1; j++) {
                 pos_x = (x + i < 0) ? WIDTH - 1 : (x + i) % WIDTH;
                 pos_y = (y + j < 0) ? HEIGHT - 1 : (y + j) % HEIGHT;
-
+                material* p1 = dynamic_cast<vivo*> (content[pos_x][pos_y]);
                 if (pos_x != x || pos_y != y)
-                    if (content[pos_x][pos_y]->estado == ALIVE)
+                    if (p1 != NULL)
                         num++;
             }
         }
