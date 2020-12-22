@@ -12,14 +12,18 @@ void initialization(material* content[WIDTH][HEIGHT]) {
 }
 void paint(material* content[WIDTH][HEIGHT]) {
     for (int i = 0; i < HEIGHT; i++) {
-        for (int j = 0; j < WIDTH; j++)
-            (content[i][j]->get_name() == DEATH) ? printf("  ") : printf("[]");
+        for (int j = 0; j < WIDTH; j++) {
+            if (content[i][j]->get_name() == DEATH) printf("  ");
+            else if (content[i][j]->get_name() == ALIVE) printf("[]");
+            else printf("||");
+        }
         printf("\n");
     }
     printf("\n");
 }
 
 void take_input(material* content[WIDTH][HEIGHT]) {
+    content[4][10] = new arena();
     content[11][10] = new alive();
     content[12][11] = new alive();
     content[10][12] = new alive();
@@ -42,6 +46,7 @@ int main(int argc, char* argv[]) {
 
     initialization(content_now);
     take_input(content_now);
+    copy_content(content_update, content_now);
 
     paint(content_now);
     while (game_state) {
