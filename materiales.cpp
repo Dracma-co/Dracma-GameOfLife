@@ -1,5 +1,4 @@
 #include "materiales.h"
-#include <stdio.h>
 
 int material::num_neighbors(material* content[WIDTH][HEIGHT], int x, int y) {
     int num = 0, pos_x, pos_y;
@@ -36,9 +35,9 @@ void arena::reaccionar(material* current[WIDTH][HEIGHT], material* update[WIDTH]
 
     int pos_x = (x + 1) % WIDTH, pos_y = y;
 
-    material* material_death = dynamic_cast<death*> (current[pos_x][pos_y]);
+    material* under = dynamic_cast<death*> (current[pos_x][pos_y]);
 
-    if (material_death) {
+    if (under) {
         update[x][y] = new death();
         update[pos_x][pos_y] = new arena();
     }
