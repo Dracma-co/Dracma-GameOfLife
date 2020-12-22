@@ -1,4 +1,6 @@
 #include <iostream>
+#include <unistd.h>
+
 #define MAX_INSTRUCTIONS 10
 #define MAX_DISPLAY 100
 #define WIDTH 50
@@ -29,11 +31,11 @@ void paint(material_t content[WIDTH][HEIGHT]) {
 }
 
 void take_input(material_t content[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL]) {
-    content[25][10] = list_material[ALIVE];
-    content[26][10] = list_material[ALIVE];
-    content[27][10] = list_material[ALIVE];
-    content[28][10] = list_material[ALIVE];
-    content[29][10] = list_material[ALIVE];
+    content[11][10] = list_material[ALIVE];
+    content[12][11] = list_material[ALIVE];
+    content[10][12] = list_material[ALIVE];
+    content[11][12] = list_material[ALIVE];
+    content[12][12] = list_material[ALIVE];
 }
 
 int num_neighbors (material_t content[WIDTH][HEIGHT], int x, int y) {
@@ -77,7 +79,7 @@ int main(int argc, char* argv[]) {
     material_t content_update[WIDTH][HEIGHT];
     material_t list_material[MAX_MATERIAL];
 
-    int contador = 0;
+    bool game_state = true;
 
     material_t death;
     death.state = DEATH;
@@ -96,8 +98,8 @@ int main(int argc, char* argv[]) {
     take_input(content_now, list_material);
 
     paint(content_now);
-    while (contador < 6) {
-
+    while (game_state) {
+        sleep(1);
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
                 for (int k = 0; k < content_now[i][j].num_instructions; k++) {
@@ -106,9 +108,8 @@ int main(int argc, char* argv[]) {
             }
         }
         copy_content(content_now, content_update);
-
+        system("clear");
         paint(content_now);
-        contador++;
     }
 
     return 0;
