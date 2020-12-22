@@ -1,5 +1,5 @@
 #include <iostream>
-#include <windows.h>
+#include <unistd.h>
 
 #define MAX_INSTRUCTIONS 10
 #define MAX_MATERIAL 10
@@ -15,7 +15,8 @@ typedef struct material {
     int num_instructions;
 } material_t;
 
-void initialization(material_t content[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL]) {
+void initialization (material_t content[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL]) {
+
     for (int i = 0; i < HEIGHT; i++)
         for (int j = 0; j < WIDTH; j++)
             content[i][j] = list_material[DEATH];
@@ -38,14 +39,14 @@ void take_input(material_t content[WIDTH][HEIGHT], material_t list_material[MAX_
     content[12][12] = list_material[ALIVE];
 }
 
-int num_neighbors(material_t content[WIDTH][HEIGHT], int x, int y) {
+int num_neighbors (material_t content[WIDTH][HEIGHT], int x, int y) {
     int num = 0, pos_x, pos_y;
 
     for (int i = -1; i <= 1; i++) {
         for (int j = -1; j <= 1; j++) {
 
-            pos_x = (x + i < 0) ? WIDTH - 1 : (x + i) % WIDTH;
-            pos_y = (y + j < 0) ? HEIGHT - 1 : (y + j) % HEIGHT;
+            pos_x = (x + i < 0) ? WIDTH - 1 : (x + i)%WIDTH;
+            pos_y = (y + j < 0) ? HEIGHT - 1 : (y + j)%HEIGHT;
 
             if (pos_x != x || pos_y != y)
                 if (content[pos_x][pos_y].state == ALIVE) num++;
@@ -54,19 +55,20 @@ int num_neighbors(material_t content[WIDTH][HEIGHT], int x, int y) {
     return num;
 }
 
-void instruction_alive(material_t content_now[WIDTH][HEIGHT], material_t content_update[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL], int x, int y) {
+void instruction_alive (material_t content_now[WIDTH][HEIGHT], material_t content_update[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL], int x, int y) {
     int neighbors_alive = num_neighbors(content_now, x, y);
 
     content_update[x][y] = (neighbors_alive < 2 || neighbors_alive > 3) ? list_material[DEATH] : content_now[x][y];
 }
 
-void instruction_death(material_t content_now[WIDTH][HEIGHT], material_t content_update[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL], int x, int y) {
+void instruction_death (material_t content_now[WIDTH][HEIGHT], material_t content_update[WIDTH][HEIGHT], material_t list_material[MAX_MATERIAL], int x, int y) {
+
     int neighbors_alive = num_neighbors(content_now, x, y);
 
     content_update[x][y] = (neighbors_alive == 3) ? list_material[ALIVE] : content_now[x][y];
 }
 
-void copy_content(material_t old_content[WIDTH][HEIGHT], material_t new_content[WIDTH][HEIGHT]) {
+void copy_content (material_t old_content[WIDTH][HEIGHT], material_t new_content[WIDTH][HEIGHT]) {
     for (int i = 0; i < WIDTH; i++)
         for (int j = 0; j < HEIGHT; j++)
             old_content[i][j] = new_content[i][j];
@@ -102,7 +104,7 @@ int main(int argc, char* argv[]) {
 
     paint(content_now);
     while (game_state) {
-        Sleep(100);
+        sleep(1);
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
                 for (int k = 0; k < content_now[i][j].num_instructions; k++) {
@@ -111,7 +113,7 @@ int main(int argc, char* argv[]) {
             }
         }
         copy_content(content_now, content_update);
-        system("cls");
+        system("clear");
         paint(content_now);
     }
 
