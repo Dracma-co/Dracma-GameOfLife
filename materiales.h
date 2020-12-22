@@ -5,7 +5,6 @@
 #define WIDTH 25
 #define HEIGHT 25
 
-#define ARENA 2
 #define ALIVE 1
 #define DEATH 0
 
@@ -45,13 +44,6 @@ class death : public material {
 	public:
 		death() : material(DEATH, 0) {};
 		~death() {}
-		void reaccionar(material* current[WIDTH][HEIGHT], material* update[WIDTH][HEIGHT], int x, int y);
-};
-
-class arena : public material {
-	public:
-		arena() : material(ARENA, 0) {};
-		~arena() {}
 		void reaccionar(material* current[WIDTH][HEIGHT], material* update[WIDTH][HEIGHT], int x, int y);
 };
 

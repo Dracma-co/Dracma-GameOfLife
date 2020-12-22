@@ -30,16 +30,3 @@ void death::reaccionar(material* current[WIDTH][HEIGHT], material* update[WIDTH]
     if (neighbors_alive == 3)
         update[x][y] = new alive();
 }
-
-void arena::reaccionar(material* current[WIDTH][HEIGHT], material* update[WIDTH][HEIGHT], int x, int y) {
-
-    int pos_x = (x + 1) % WIDTH, pos_y = y;
-
-    material* under = dynamic_cast<death*> (current[pos_x][pos_y]);
-
-    if (under) {
-        update[x][y] = new death();
-        update[pos_x][pos_y] = new arena();
-    }
-
-}
