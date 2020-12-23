@@ -1,5 +1,4 @@
-#ifndef _MATERIALES_H_
-#define _MATERIALES_H_
+#pragma once
 
 #define MAX_MATERIAL 10
 #define WIDTH 50
@@ -46,4 +45,3 @@ public:
 	void reaccionar(material* current[WIDTH][HEIGHT], material* update[WIDTH][HEIGHT], int x, int y);
 };
 
-#endif /* MATERIALES_H */
