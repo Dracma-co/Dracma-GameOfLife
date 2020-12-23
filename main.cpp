@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <iostream>
-#include <iostream>
-#include <unistd.h>
+#include <GLFW/glfw3.h>
 
 #include "materiales.h"
 
@@ -33,7 +32,7 @@ void copy_content(material* old_content[WIDTH][HEIGHT], material* new_content[WI
             old_content[i][j] = new_content[i][j];
 }
 
-int main(int argc, char* argv[]) {
+/*int main(int argc, char* argv[]) {
 
     material* content_now[WIDTH][HEIGHT];
     material* content_update[WIDTH][HEIGHT];
@@ -57,5 +56,39 @@ int main(int argc, char* argv[]) {
         paint(content_now);
     }
 
+    return 0;
+}*/
+
+int main(void)
+{
+    /* Initialize the library */
+    if (!glfwInit()) {
+        printf("ERROR No se inicializó correctamente\n");
+        return -1;
+    }
+
+    /* Create a windowed mode window and its OpenGL context */
+    GLFWwindow* window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    if (!window) {
+        printf("ERROR la pantalla no se creó correctamente\n");
+        glfwTerminate();
+        return -1;
+    }
+
+    /* Make the window's context current */
+    glfwMakeContextCurrent(window);
+
+    /* Loop until the user closes the window */
+    while (!glfwWindowShouldClose(window))
+    {
+
+        /* Swap front and back buffers */
+        glfwSwapBuffers(window);
+
+        /* Poll for and process events */
+        glfwPollEvents();
+    }
+
+    glfwTerminate();
     return 0;
 }
