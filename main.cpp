@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <iostream>
-#include <iostream>
 #include <unistd.h>
 
 #include "materiales.h"
